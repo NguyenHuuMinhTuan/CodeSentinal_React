@@ -1,0 +1,16 @@
+@use "../../../assets/styles/abstracts/variables" as *;
+@use "../../../assets/styles/abstracts/mixins" as *;
+
+.upload-zone{
+
+    @include card;
+
+    @include hover-card;
+
+    border:2px dashed $border;
+
+    text-align:center;
+
+    cursor:pointer;
+
+}

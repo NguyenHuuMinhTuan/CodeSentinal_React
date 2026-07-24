@@ -1,0 +1,14 @@
+.findings-filter {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.findings-filter-input {
+    flex: 1;
+}
+
+.findings-filter-select {
+    width: 160px;
+}
