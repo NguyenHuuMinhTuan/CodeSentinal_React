@@ -1,44 +1,34 @@
 import { useState } from "react";
 import { Upload, Button, message } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
-import api from "@/shared/api/api";
 
 const { Dragger } = Upload;
 
-export default function UploadZone({ setLoading, setScanResult }) {
-
+export default function UploadZone({ loading, onScan }) {
     const [file, setFile] = useState(null);
 
-    const beforeUpload = (file) => {
-        setFile(file);
-        return false; // prevent auto upload
+    const beforeUpload = (candidate) => {
+        setFile(candidate);
+        return false; // prevent antd's own auto-upload; we scan explicitly
     };
 
-    const upload = async () => {
+    const handleScan = async () => {
         if (!file) {
-            message.warning("Please choose a file to upload.");
+            message.warning("Choose an archive first.");
             return;
         }
 
-        const formData = new FormData();
-        formData.append("file", file);
-
         try {
-            setLoading(true);
-
-            const response = await api.post(
-                "/api/scans/upload",
-                 formData, {
-                headers: { "Content-Type": "multipart/form-data" }
-            });
-
-            setScanResult(response.data);
-            message.success("Upload successful");
-        } catch (err) {
-            message.error("Upload failed");
-        } finally {
-            setLoading(false);
+            await onScan(file);
+            message.success("Scan complete.");
+        } catch {
+            message.error("Scan failed.");
         }
+    };
+
+    const handleClear = () => {
+        setFile(null);
+        message.info("Selection cleared.");
     };
 
     return (
@@ -49,18 +39,23 @@ export default function UploadZone({ setLoading, setScanResult }) {
                 beforeUpload={beforeUpload}
                 multiple={false}
                 showUploadList={{ showRemoveIcon: true }}
-                className="w-full"
+                onRemove={handleClear}
             >
-                <p className="ant-upload-drag-icon"><InboxOutlined /></p>
-                <p className="ant-upload-text" style={{ color: '#eef6fb' }}>Kéo thả file hoặc nhấn để chọn file</p>
-                <p className="upload-instructions">Hỗ trợ: .zip, .rar — Tối ưu để quét toàn bộ project</p>
+                <p className="ant-upload-drag-icon">
+                    <InboxOutlined />
+                </p>
+                <p className="ant-upload-text">Drop archive or click to browse</p>
+                <p className="ant-upload-hint">Accepted formats: .zip, .rar</p>
             </Dragger>
 
-            <div className="upload-actions">
-                <Button type="primary" onClick={upload} disabled={!file}>Scan</Button>
-                <Button onClick={() => { setFile(null); message.info('File đã được bỏ chọn'); }}>Clear</Button>
+            <div className="upload-zone__actions">
+                <Button type="primary" onClick={handleScan} disabled={!file || loading}>
+                    {loading ? "Scanning…" : "Scan archive"}
+                </Button>
+                <Button onClick={handleClear} disabled={!file || loading}>
+                    Clear
+                </Button>
             </div>
         </div>
     );
-
 }

@@ -1,0 +1,82 @@
+@use "../shared/styles/variable" as *;
+
+.app-shell {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-shell__topbar {
+    display: flex;
+    align-items: center;
+    gap: $space-5;
+    padding: 0 $space-6;
+    height: 52px;
+    border-bottom: 1px solid $border;
+    background: $panel;
+}
+
+.app-shell__brand {
+    font-family: $font-mono;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: $text;
+}
+
+.app-shell__status {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    margin-left: auto;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    color: $text-muted;
+}
+
+.app-shell__status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $success;
+    box-shadow: 0 0 0 3px rgba($success, 0.15);
+}
+
+.app-shell__session {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+}
+
+.app-shell__username {
+    font-family: $font-mono;
+    font-size: 12px;
+    color: $text-secondary;
+    max-width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.app-shell__logout {
+    background: transparent;
+    border: 1px solid $border;
+    border-radius: $radius-sm;
+    color: $text-secondary;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: border-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+        border-color: $border-strong;
+        color: $text;
+    }
+}
+
+.app-shell__content {
+    flex: 1;
+    padding: $space-6;
+}

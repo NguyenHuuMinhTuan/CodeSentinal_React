@@ -1,29 +1,24 @@
-import {
-    BrowserRouter,
-    Routes,
-    Route,
-    Navigate
-} from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 import LoginPage from "../../features/auth/pages/LoginPage";
 import DashboardPage from "../../features/dashboard/pages/DashboardPage";
+import MainLayout from "../../layouts/MainLayout";
 
 import ProtectedRoute from "./ProtectedRoute";
 import AuthRoute from "./AuthRoute";
+import { ROUTES } from "../../shared/constants/routes";
 
 export default function AppRouter() {
     return (
         <BrowserRouter>
-
             <Routes>
-
                 <Route
-                    path="/"
-                    element={<Navigate to="/dashboard" />}
+                    path={ROUTES.HOME}
+                    element={<Navigate to={ROUTES.DASHBOARD} replace />}
                 />
 
                 <Route
-                    path="/auth/login"
+                    path={ROUTES.LOGIN}
                     element={
                         <AuthRoute>
                             <LoginPage />
@@ -32,16 +27,16 @@ export default function AppRouter() {
                 />
 
                 <Route
-                    path="/dashboard"
+                    path={ROUTES.DASHBOARD}
                     element={
                         <ProtectedRoute>
-                            <DashboardPage />
+                            <MainLayout>
+                                <DashboardPage />
+                            </MainLayout>
                         </ProtectedRoute>
                     }
                 />
-
             </Routes>
-
         </BrowserRouter>
     );
 }

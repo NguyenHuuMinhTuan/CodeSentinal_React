@@ -1,15 +1,37 @@
-.dashboard{
+@use "../../../shared/styles/variable" as *;
 
-    padding:40px;
-
+.dashboard-page {
+    max-width: 1280px;
+    margin: 0 auto;
 }
 
-.dashboard-title{
+.dashboard-page__header {
+    margin-bottom: $space-5;
 
-    font-size:36px;
+    h1 {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 600;
+        color: $text;
+    }
 
-    font-weight:bold;
+    p {
+        margin: $space-1 0 0;
+        color: $text-muted;
+        font-size: 13px;
+    }
+}
 
-    margin-bottom:30px;
+.dashboard-page__upload {
+    margin-bottom: $space-5;
+}
 
+.dashboard-page__error {
+    margin: $space-3 0 0;
+    color: $danger;
+    font-size: 13px;
+}
+
+.dashboard-page__row {
+    margin-top: $space-4 !important;
 }

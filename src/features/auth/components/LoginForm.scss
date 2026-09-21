@@ -1,0 +1,90 @@
+@use "../../../shared/styles/variable" as *;
+@use "../../../shared/styles/mixins" as *;
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        gap: $space-2;
+
+        label {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            color: $text-secondary;
+        }
+
+        input {
+            padding: 11px 12px;
+            border: 1px solid $border;
+            border-radius: $radius-sm;
+            background: rgba(255, 255, 255, 0.03);
+            color: $text;
+            font-size: 14px;
+            transition: border-color 0.15s ease;
+
+            &::placeholder {
+                color: $text-muted;
+            }
+
+            &:focus {
+                outline: none;
+                border-color: $primary;
+            }
+        }
+    }
+
+    &__error {
+        border: 1px solid rgba($danger, 0.4);
+        background: rgba($danger, 0.08);
+        color: $danger;
+        font-size: 13px;
+        padding: $space-2 $space-3;
+        border-radius: $radius-sm;
+    }
+
+    &__submit {
+        padding: 12px;
+        border: 1px solid $primary;
+        border-radius: $radius-sm;
+        background: $primary;
+        color: #fff;
+        font-weight: 600;
+        font-size: 14px;
+        letter-spacing: 0.01em;
+        cursor: pointer;
+        transition: background 0.15s ease, border-color 0.15s ease;
+
+        &:hover:not(:disabled) {
+            background: $primary-hover;
+            border-color: $primary-hover;
+        }
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+
+    &__oauth {
+        display: block;
+        text-align: center;
+        padding: 11px;
+        border: 1px solid $border;
+        border-radius: $radius-sm;
+        color: $text-secondary;
+        font-size: 13px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: border-color 0.15s ease, color 0.15s ease;
+
+        &:hover {
+            border-color: $border-strong;
+            color: $text;
+        }
+    }
+}

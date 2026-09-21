@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { Row, Col, Card } from "antd";
 import "./DashboardPage.scss";
+
+import useScan from "../hooks/useScan";
 import UploadZone from "../components/dashboard/UploadZone";
 import LoadingOverlay from "../components/dashboard/LoadingOverlay";
 import SummaryCards from "../components/dashboard/SummaryCards";
@@ -8,67 +10,72 @@ import SeverityChart from "../components/dashboard/SeverityChart";
 import RiskScore from "../components/dashboard/RiskScore";
 import FindingsTable from "../components/dashboard/FindingsTable";
 import SuspiciousFiles from "../components/dashboard/SuspiciousFiles";
-import { Row, Col, Card } from "antd";
 
 export default function DashboardPage() {
-
-    const [loading, setLoading] = useState(false);
-    const [scanResult, setScanResult] = useState(null);
+    const { scan, loading, scanResult, error } = useScan();
 
     return (
-        <div className="dashboard-root min-h-screen bg-slate-950 text-white p-8">
-
+        <div className="dashboard-page">
             <LoadingOverlay loading={loading} />
 
-            <h1 className="text-4xl font-bold mb-8">CodeSentinel Dashboard</h1>
+            <div className="dashboard-page__header">
+                <h1>Scan console</h1>
+                <p>Upload a source archive to run static detection.</p>
+            </div>
 
-            <UploadZone
-                setLoading={setLoading}
-                setScanResult={setScanResult}
-            />
+            <Card bordered={false} className="dashboard-page__upload">
+                <UploadZone loading={loading} onScan={scan} />
+                {error && <p className="dashboard-page__error">{error}</p>}
+            </Card>
 
             {scanResult && (
                 <>
+                    <SummaryCards
+                        totalFiles={scanResult.totalFiles}
+                        findingsCount={scanResult.findings?.length ?? 0}
+                        suspiciousCount={scanResult.suspiciousFiles?.length ?? 0}
+                        extensionsCount={Object.keys(scanResult.extensions || {}).length}
+                    />
 
-                    <SummaryCards data={scanResult} />
-
-                    <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+                    <Row gutter={[16, 16]} className="dashboard-page__row">
                         <Col xs={24} lg={12}>
-                            <Card title="File extensions" bordered={false} bodyStyle={{ padding: 12 }}>
-                                <ExtensionChart data={scanResult} />
+                            <Card title="File extensions" bordered={false}>
+                                <ExtensionChart extensions={scanResult.extensions} />
                             </Card>
                         </Col>
                         <Col xs={24} lg={12}>
-                            <Card title="Severity distribution" bordered={false} bodyStyle={{ padding: 12 }}>
-                                <SeverityChart data={scanResult} />
+                            <Card title="Severity distribution" bordered={false}>
+                                <SeverityChart findings={scanResult.findings} />
                             </Card>
                         </Col>
                     </Row>
 
-                    <Row style={{ marginTop: 16 }} gutter={[16, 16]}>
+                    <Row gutter={[16, 16]} className="dashboard-page__row">
                         <Col xs={24} lg={8}>
-                            <Card title="Risk Score" bordered={false} bodyStyle={{ padding: 12 }}>
-                                <RiskScore data={scanResult} />
+                            <Card title="Overall risk" bordered={false}>
+                                <RiskScore
+                                    findings={scanResult.findings}
+                                    totalFiles={scanResult.totalFiles}
+                                    suspiciousCount={scanResult.suspiciousFiles?.length}
+                                />
                             </Card>
                         </Col>
                         <Col xs={24} lg={16}>
-                            <Card title="Findings" bordered={false} bodyStyle={{ padding: 12 }}>
+                            <Card title="Findings" bordered={false}>
                                 <FindingsTable findings={scanResult.findings} />
                             </Card>
                         </Col>
                     </Row>
 
-                    <Row style={{ marginTop: 16 }}>
+                    <Row className="dashboard-page__row">
                         <Col xs={24}>
-                            <Card title="Suspicious Files" bordered={false} bodyStyle={{ padding: 12 }}>
+                            <Card title="Suspicious files" bordered={false}>
                                 <SuspiciousFiles files={scanResult.suspiciousFiles} />
                             </Card>
                         </Col>
                     </Row>
-
                 </>
             )}
-
         </div>
     );
 }

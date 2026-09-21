@@ -1,129 +1,53 @@
 import { useState } from "react";
-import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
-import { useNavigate } from "react-router-dom"; // 1. Thêm navigate
-import api from "@/shared/api/api";
-import "./LoginForm.css";
+import useLogin from "../hooks/useLogin";
+import { facebookLoginUrl } from "../services/authService";
+import "./LoginForm.scss";
 
 export default function LoginForm() {
-    const [email, setEmail] = useState(""); // 2. Đổi username -> email
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
+    const { submit, loading, error } = useLogin();
 
-    const navigate = useNavigate();
-    const { executeRecaptcha } = useGoogleReCaptcha();
-
-    const handleFacebookLogin = () => {
-        window.location.href =
-            "http://localhost:8080/oauth2/authorization/facebook";
-    };
-
-    const handleLogin = async (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        setError("");
-
-        // 3. Validate client đầu vào theo biến mới
-        if (!email.trim()) {
-            setError("Email is required");
-            return;
-        }
-
-        if (!password.trim()) {
-            setError("Password is required");
-            return;
-        }
-
-        try {
-            setLoading(true);
-
-            if (!executeRecaptcha) {
-                setError("reCAPTCHA is not ready");
-                return;
-            }
-
-            const recaptchaToken = await executeRecaptcha("login");
-
-            // CHÈN THÊM DÒNG NÀY ĐỂ KIỂM TRA
-            console.log("=== RECAPTCHA TOKEN THÀNH CÔNG ===", recaptchaToken);
-
-            const response = await api.post(
-                "/api/auth/login",
-                {
-                    email, // 4. Gửi đúng trường 'email' khớp với LoginRequest của Spring Boot
-                    password,
-                    recaptchaToken
-                }
-            );
-
-            // 5. Đọc data thành công theo cấu trúc ApiResponse chung
-            const apiResponse = response.data;
-            if (apiResponse.success) {
-                console.log("Login Success:", apiResponse.data);
-
-                // Lưu token (sau này dùng JWT thì lưu vào đây)
-                if (apiResponse.data.accessToken) {
-                    localStorage.setItem("accessToken", apiResponse.data.accessToken);
-                    localStorage.setItem("refreshToken", apiResponse.data.refreshToken);
-                }
-
-                // Chuyển hướng sang trang Dashboard
-                navigate("/dashboard");
-            } else {
-                setError(apiResponse.message || "Login failed");
-            }
-
-        } catch (err) {
-            // 6. Bắt lỗi chuẩn theo cấu trúc ApiResponse từ GlobalExceptionHandler trả về
-            const backendError = err?.response?.data;
-            if (backendError && backendError.message) {
-                // Nếu dính lỗi Validation, hiển thị lỗi đầu tiên trong mảng errors (nếu có)
-                if (backendError.errors && backendError.errors.length > 0) {
-                    setError(backendError.errors[0]);
-                } else {
-                    setError(backendError.message); // Hiển thị "Invalid credentials", v.v.
-                }
-            } else {
-                setError("Cannot connect to server");
-            }
-        } finally {
-            setLoading(false);
-        }
+        submit({ email, password });
     };
 
     return (
-        <form className="login-form" onSubmit={handleLogin}>
-            <div className="form-group">
-                <label>Email</label>
+        <form className="login-form" onSubmit={handleSubmit}>
+            <div className="login-form__group">
+                <label htmlFor="email">Email</label>
                 <input
-                    type="email" // Đổi type thành email để browser tự check format cơ bản
-                    placeholder="Enter email"
+                    id="email"
+                    type="email"
+                    autoComplete="username"
+                    placeholder="you@company.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                 />
             </div>
 
-            <div className="form-group">
-                <label>Password</label>
+            <div className="login-form__group">
+                <label htmlFor="password">Password</label>
                 <input
+                    id="password"
                     type="password"
-                    placeholder="Enter password"
+                    autoComplete="current-password"
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                 />
             </div>
 
-            {error && <div className="error-message">{error}</div>}
+            {error && <div className="login-form__error" role="alert">{error}</div>}
 
-            <button type="submit" className="login-btn" disabled={loading}>
-                {loading ? "Signing In..." : "Sign In"}
+            <button type="submit" className="login-form__submit" disabled={loading}>
+                {loading ? "Authenticating…" : "Sign in"}
             </button>
-            <button
-                type="button"
-                className="facebook-btn"
-                onClick={handleFacebookLogin}
-            >
+
+            <a href={facebookLoginUrl()} className="login-form__oauth">
                 Continue with Facebook
-            </button>
+            </a>
         </form>
     );
 }

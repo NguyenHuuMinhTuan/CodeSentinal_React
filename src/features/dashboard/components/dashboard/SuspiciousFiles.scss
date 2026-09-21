@@ -1,0 +1,38 @@
+@use "../../../../shared/styles/variable" as *;
+
+.suspicious-files {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.suspicious-files__item {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-3 0;
+    border-bottom: 1px solid $border;
+
+    &:last-child {
+        border-bottom: none;
+    }
+}
+
+.suspicious-files__marker {
+    width: 6px;
+    height: 6px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: $danger;
+}
+
+.suspicious-files__path {
+    font-family: $font-mono;
+    font-size: 13px;
+    color: $text;
+}
+
+.suspicious-files__empty {
+    color: $text-muted;
+    font-size: 13px;
+}

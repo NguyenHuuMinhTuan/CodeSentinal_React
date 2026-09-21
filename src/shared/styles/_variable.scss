@@ -1,0 +1,40 @@
+// Surfaces
+$bg: #0a1120;
+$panel: #111b2d;
+$panel-hover: #16233a;
+$border: #223148;
+$border-strong: #2d4162;
+
+// Brand / interactive
+$primary: #3f7fd1;
+$primary-hover: #5b93da;
+
+// Status
+$danger: #e5484d;
+$warning: #f2a93b;
+$success: #3aa876;
+
+// Text
+$text: #e4e9f2;
+$text-secondary: #8b98ad;
+$text-muted: #5b6b85;
+
+// Legacy alias kept for any un-migrated partials
+$card: $panel;
+$card-hover: $panel-hover;
+
+// Shape
+$radius: 6px;
+$radius-sm: 4px;
+
+// Type
+$font-sans: "Inter", -apple-system, "Segoe UI", sans-serif;
+$font-mono: "JetBrains Mono", "SFMono-Regular", "Consolas", monospace;
+
+// Spacing scale
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 24px;
+$space-6: 32px;

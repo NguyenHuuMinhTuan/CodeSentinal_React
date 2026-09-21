@@ -1,14 +1,22 @@
-.findings-filter {
+@use "../../../../shared/styles/variable" as *;
+
+.findings-table__filters {
     display: flex;
     align-items: center;
-    gap: 16px;
-    margin-bottom: 24px;
+    gap: $space-3;
+    margin-bottom: $space-4;
 }
 
-.findings-filter-input {
+.findings-table__search {
     flex: 1;
 }
 
-.findings-filter-select {
+.findings-table__severity {
     width: 160px;
+}
+
+.findings-table__empty {
+    color: $text-muted;
+    font-size: 13px;
+    padding: $space-4 0;
 }

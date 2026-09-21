@@ -1,27 +1,21 @@
-import { Row, Col, Card } from "antd";
+import "./SummaryCards.scss";
 
-export default function SummaryCards({ data }) {
-
+export default function SummaryCards({ totalFiles, findingsCount, suspiciousCount, extensionsCount }) {
     const stats = [
-        { key: "files", title: "Files", value: data.totalFiles },
-        { key: "findings", title: "Findings", value: data.findings?.length ?? 0 },
-        { key: "suspicious", title: "Suspicious", value: data.suspiciousFiles?.length ?? 0 },
-        { key: "extensions", title: "Extensions", value: Object.keys(data.extensions || {}).length }
+        { key: "files", label: "Files scanned", value: totalFiles },
+        { key: "findings", label: "Findings", value: findingsCount },
+        { key: "suspicious", label: "Suspicious files", value: suspiciousCount },
+        { key: "extensions", label: "Extensions", value: extensionsCount },
     ];
 
     return (
-
-        <Row gutter={[16, 16]} style={{ marginTop: 16 }}>
+        <div className="summary-cards">
             {stats.map((s) => (
-                <Col key={s.key} xs={24} sm={12} md={12} lg={6}>
-                    <Card bordered={false} className="summary-card">
-                        <div style={{ color: '#9CA3AF' }}>{s.title}</div>
-                        <div style={{ fontSize: 28, fontWeight: 700, marginTop: 8 }}>{s.value}</div>
-                    </Card>
-                </Col>
+                <div key={s.key} className="summary-cards__item">
+                    <div className="summary-cards__label">{s.label}</div>
+                    <div className="summary-cards__value">{s.value}</div>
+                </div>
             ))}
-        </Row>
-
+        </div>
     );
-
 }

@@ -1,16 +1,19 @@
-@use "../../../assets/styles/abstracts/variables" as *;
-@use "../../../assets/styles/abstracts/mixins" as *;
+@use "../../../../shared/styles/variable" as *;
 
-.upload-zone{
+.upload-zone {
+    display: flex;
+    align-items: center;
+    gap: $space-5;
+    flex-wrap: wrap;
 
-    @include card;
+    .ant-upload-drag {
+        flex: 1;
+        min-width: 260px;
+    }
 
-    @include hover-card;
-
-    border:2px dashed $border;
-
-    text-align:center;
-
-    cursor:pointer;
-
+    &__actions {
+        display: flex;
+        gap: $space-2;
+        flex-shrink: 0;
+    }
 }

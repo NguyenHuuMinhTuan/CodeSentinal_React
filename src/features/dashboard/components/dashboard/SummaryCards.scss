@@ -1,19 +1,29 @@
-.summary-container{
+@use "../../../../shared/styles/variable" as *;
+@use "../../../../shared/styles/mixins" as *;
 
-    display:grid;
+.summary-cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: $space-4;
 
-    grid-template-columns:repeat(4,1fr);
-
-    gap:20px;
-
+    @media (max-width: 900px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.summary-card{
+.summary-cards__item {
+    @include panel;
+    padding: $space-4 $space-5;
+}
 
-    @include card;
+.summary-cards__label {
+    @include section-label;
+}
 
-    @include hover-card;
-
-    text-align:center;
-
+.summary-cards__value {
+    margin-top: $space-2;
+    font-family: $font-mono;
+    font-size: 28px;
+    font-weight: 600;
+    color: $text;
 }

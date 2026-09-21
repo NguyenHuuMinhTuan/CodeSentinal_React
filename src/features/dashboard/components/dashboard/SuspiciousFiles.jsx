@@ -1,49 +1,18 @@
-import { FaSkullCrossbones } from "react-icons/fa";
+import "./SuspiciousFiles.scss";
 
 export default function SuspiciousFiles({ files }) {
+    if (!files || files.length === 0) {
+        return <p className="suspicious-files__empty">No suspicious files detected.</p>;
+    }
 
     return (
-
-        <div className="bg-slate-800 rounded-xl p-6 mt-6">
-
-            <h2 className="text-xl font-bold mb-5">
-
-                Suspicious Files
-
-            </h2>
-
-            {
-
-                files.map(file => (
-
-                    <div
-
-                        key={file}
-
-                        className="flex items-center border-b border-slate-700 py-3"
-
-                    >
-
-                        <FaSkullCrossbones
-
-                            className="text-red-500 mr-3"
-
-                        />
-
-                        <span>
-
-                            {file}
-
-                        </span>
-
-                    </div>
-
-                ))
-
-            }
-
-        </div>
-
+        <ul className="suspicious-files">
+            {files.map((file) => (
+                <li key={file} className="suspicious-files__item">
+                    <span className="suspicious-files__marker" />
+                    <span className="suspicious-files__path">{file}</span>
+                </li>
+            ))}
+        </ul>
     );
-
 }

@@ -1,102 +1,118 @@
-@use "./variable" as *;
+@use "../../../../shared/styles/variable" as *;
 
-body{
-
-    margin:0;
-
-    background:$bg;
-
-    color:$text;
-
-    font-family:"Inter",sans-serif;
-
+html,
+body {
+    margin: 0;
+    background: $bg;
+    color: $text;
+    font-family: $font-sans;
+    -webkit-font-smoothing: antialiased;
 }
 
-*{
-
-    box-sizing:border-box;
-
+* {
+    box-sizing: border-box;
 }
 
-.summary-card{
+#root {
+    min-height: 100vh;
+}
+
+::selection {
+    background: rgba($primary, 0.35);
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
     background: transparent;
-    border-radius: 8px;
-    padding: 12px;
 }
 
-.ant-card{
-    background-color: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.03);
+::-webkit-scrollbar-thumb {
+    background: $border-strong;
+    border-radius: $radius-sm;
 }
 
-.upload-zone {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+// --- Ant Design dark-console overrides -------------------------------
+// The default antd theme is a bright, friendly SaaS look; these overrides
+// pull every antd primitive we use into the same flat, bordered surface
+// language as the rest of the app instead of theming per-component.
+
+.ant-card {
+    background: $panel;
+    border: 1px solid $border;
 }
 
-.upload-instructions {
-    color: $text-secondary;
-    font-size: 14px;
-}
-
-.upload-actions {
-    display:flex;
-    gap:8px;
-}
-
-/* Force dashboard text to white unless explicitly colored */
-.dashboard-root, .dashboard-root * {
-    color: $text !important;
-}
-
-.error-code {
-    color: $danger !important;
-    font-weight: 700;
-}
-
-/* Findings filter control custom styles */
-.findings-filter-input .ant-input {
-    background: rgba(255,255,255,0.04) !important;
-    border-radius: 10px;
-    border: 1px solid rgba(255,255,255,0.06) !important;
-    color: $text !important;
-    padding: 8px 12px !important;
-}
-
-.findings-filter-input .ant-input::placeholder,
-.findings-filter-input .ant-input:-ms-input-placeholder,
-.findings-filter-input .ant-input::-ms-input-placeholder {
-    color: $text-secondary !important;
-}
-
-.findings-filter-select .ant-select-selector {
-    background: rgba(255,255,255,0.04) !important;
-    border-radius: 10px !important;
-    border: 1px solid rgba(255,255,255,0.06) !important;
-    color: $text !important;
-    min-height: 40px;
-    display: flex;
-    align-items: center;
-    padding: 4px 12px !important;
-}
-
-/* dropdown menu darker background and white text */
-.findings-filter-select .ant-select-item-option {
-    background: $card;
+.ant-card-head {
+    border-bottom: 1px solid $border;
     color: $text;
 }
 
-.findings-filter-select .ant-select-item-option-active {
-    background: $card-hover;
+.ant-card-head-title {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: $text-secondary;
 }
 
-.findings-filter-select .ant-select-selection-placeholder {
-    color: $text-secondary !important;
-}
-
-.findings-filter-select .ant-select-selection-item,
-.findings-filter-select .ant-select-selection-placeholder {
+.ant-input,
+.ant-select-selector {
+    background: rgba(255, 255, 255, 0.03) !important;
+    border: 1px solid $border !important;
+    border-radius: $radius-sm !important;
     color: $text !important;
+}
+
+.ant-input::placeholder,
+.ant-select-selection-placeholder {
+    color: $text-muted !important;
+}
+
+.ant-select-dropdown {
+    background: $panel;
+    border: 1px solid $border;
+}
+
+.ant-select-item {
+    color: $text;
+}
+
+.ant-select-item-option-active {
+    background: $panel-hover !important;
+}
+
+.ant-select-item-option-selected {
+    background: rgba($primary, 0.18) !important;
+    color: $text !important;
+}
+
+.ant-btn-primary {
+    background: $primary;
+    border-color: $primary;
+
+    &:hover {
+        background: $primary-hover;
+        border-color: $primary-hover;
+    }
+}
+
+.ant-upload-drag {
+    background: transparent !important;
+    border: 1px dashed $border-strong !important;
+    border-radius: $radius !important;
+}
+
+.ant-upload-drag:hover {
+    border-color: $primary !important;
+}
+
+.ant-upload-text {
+    color: $text !important;
+}
+
+.ant-upload-hint {
+    color: $text-muted !important;
 }

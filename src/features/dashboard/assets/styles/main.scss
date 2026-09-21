@@ -1,6 +1,4 @@
-@use "./variable";
-@use "./mixins";
-@use "./theme";
-@use "./animations";
+@use "../../../../shared/styles/variable";
+@use "../../../../shared/styles/mixins";
 
 @use "./global";

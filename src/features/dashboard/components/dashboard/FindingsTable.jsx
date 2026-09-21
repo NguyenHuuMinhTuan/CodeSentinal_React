@@ -1,93 +1,42 @@
-import { useMemo, useState } from "react";
-import FindingCard from "./FindingCard";
 import { Input, Select } from "antd";
-import { color } from "framer-motion";
+import FindingGroup from "./FindingGroup";
+import useFindingsFilter from "../../hooks/useFindingsFilter";
+import useGroupedFindings from "../../hooks/useGroupedFindings";
 import "./FindingsTable.scss";
 
 export default function FindingsTable({ findings }) {
-
-    const [search, setSearch] = useState("");
-
-    const [severity, setSeverity] = useState("ALL");
-
-    const filtered = useMemo(() => {
-
-        return findings.filter(item => {
-
-            const matchSeverity =
-                severity === "ALL" ||
-                item.severity === severity;
-
-            const keyword =
-                search.toLowerCase();
-
-            const matchSearch =
-
-                item.file.toLowerCase().includes(keyword) ||
-
-                item.type.toLowerCase().includes(keyword) ||
-
-                item.detector.toLowerCase().includes(keyword);
-
-            return matchSeverity && matchSearch;
-
-        });
-
-    }, [findings, search, severity]);
+    const { search, setSearch, severity, setSeverity, filtered } = useFindingsFilter(findings);
+    const groups = useGroupedFindings(filtered);
 
     return (
-
-        <div className="bg-slate-800 rounded-xl p-6 mt-6">
-
-            <h2 className="text-2xl font-bold mb-6">
-
-                Findings
-
-            </h2>
-
-
-            <div className="findings-filter">
-
+        <div className="findings-table">
+            <div className="findings-table__filters">
                 <Input
-                    className="findings-filter-input"
-                    placeholder="Search..."
+                    className="findings-table__search"
+                    placeholder="Search file, type or detector…"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
+                    allowClear
                 />
 
                 <Select
-                    className="findings-filter-select"
+                    className="findings-table__severity"
                     value={severity}
-                    onChange={(val) => setSeverity(val)}
+                    onChange={setSeverity}
                     options={[
-                        { value: 'ALL', label: 'ALL' },
-                        { value: 'HIGH', label: 'HIGH' },
-                        { value: 'MEDIUM', label: 'MEDIUM' },
-                        { value: 'LOW', label: 'LOW' }
+                        { value: "ALL", label: "All severities" },
+                        { value: "HIGH", label: "High" },
+                        { value: "MEDIUM", label: "Medium" },
+                        { value: "LOW", label: "Low" },
                     ]}
-                    style={{ minWidth: 120 }}
                 />
-
             </div>
 
-            {
-
-                filtered.map((finding, index) => (
-
-                    <FindingCard
-
-                        key={index}
-
-                        finding={finding}
-
-                    />
-
-                ))
-
-            }
-
+            {groups.length === 0 ? (
+                <p className="findings-table__empty">No findings match the current filters.</p>
+            ) : (
+                groups.map((group) => <FindingGroup key={group.type} group={group} />)
+            )}
         </div>
-
     );
-
 }

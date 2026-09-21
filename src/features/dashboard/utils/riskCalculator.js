@@ -1,18 +1,14 @@
+import { SEVERITY_WEIGHT } from "@/shared/constants/severity";
+
 export default function calculateRisk(findings, totalFiles, suspiciousFilesCount) {
 
     if (!findings || findings.length === 0) return 0;
-
-    const weight = {
-        HIGH: 10,
-        MEDIUM: 5,
-        LOW: 2
-    };
 
     // Aggregate by file, cap each file to the highest-severity weight
     const perFile = {};
     findings.forEach(item => {
         const file = item.file || 'unknown';
-        const w = weight[item.severity] || 0;
+        const w = SEVERITY_WEIGHT[item.severity] || 0;
         perFile[file] = Math.max(perFile[file] || 0, w);
     });
 
